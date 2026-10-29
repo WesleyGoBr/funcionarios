@@ -24,11 +24,11 @@ function M:L(key, ...)
 end
 
 M.contracts = {
-    {name=M:L("employees_geringfuegig_3"), salary=600, hours=40},
-    {name=M:L("employees_teilzeit"), salary=1600, hours=80},
-    {name=M:L("employees_vollzeit"), salary=3200, hours=160},
-	{name=M:L("employees_leiharbeiter"), salary=120, hours=8, temporary=true},
-    {name=M:L("employees_seasonal"), salary=3000, hours=160, seasonal=true}
+    {name=M:L("employees_geringfuegig_3"), salary=83.5, hours=44},
+    {name=M:L("employees_teilzeit"), salary=166.95, hours=88},
+    {name=M:L("employees_vollzeit"), salary=333.90, hours=176},
+    {name=M:L("employees_leiharbeiter"), salary=16.86, hours=8, temporary=true},
+    {name=M:L("employees_seasonal"), salary=333.90, hours=176, seasonal=true}
 }
 M.maxEmployees = 10
 M.roster = {
@@ -50,7 +50,7 @@ M.trainingTypes = {
     {key="animals", label=M:L("employees_tierhaltung"), maxLevel=3},
     {key="machinery", label=M:L("employees_maschinentechnik"), maxLevel=3}
 }
-M.trainingCosts = {500, 750, 1000}
+M.trainingCosts = {25.30, 50.60, 75.90}
 M.trainingHours = {2, 5, 8}
 M.trainingSpeedByLevel = {[0]=0.25, [1]=0.50, [2]=0.75, [3]=1.00}
 
@@ -268,8 +268,8 @@ function M:getQualificationSalary(contract, level)
     if contract == nil then return 0 end
     if contract.temporary or contract.seasonal then return contract.salary end
     level = math.max(0, math.min(3, math.floor(tonumber(level) or 0)))
-    if contract == self.contracts[1] then return 450 + 50 * level end
-    return (2600 + 200 * level) * contract.hours / 160
+    if contract == self.contracts[1] then return 83.5 + 11 * level end
+return (334 + 44 * level) * contract.hours / 176
 end
 
 function M:getSalaryTrainingLevel(e)
@@ -296,7 +296,7 @@ function M:ensureDevelopment(e)
     e.age = math.max(17, math.floor(tonumber(e.age) or 17))
     e.ageMonths = math.max(0, math.min(11, math.floor(tonumber(e.ageMonths) or 0)))
     if self:isSeasonalEmployee(e) then
-        e.salary = 3000
+        e.salary = 333.90
         e.activeTraining, e.trainingTarget, e.trainingRemaining, e.trainingStartClock = nil, nil, nil, nil
     end
     e.training = e.training or {}
@@ -1072,7 +1072,7 @@ function M:loadState()
         local key = string.format("employees.contract(%d)", i-1)
         c.salary = math.max(0, getXMLFloat(xml, key .. "#salary") or c.salary)
         c.hours = math.max(1, getXMLFloat(xml, key .. "#hours") or c.hours)
-        if c.seasonal then c.salary = 3000 end
+        if c.seasonal then c.salary = 333.90 end
     end
     local retiredIndex = 0
     while hasXMLProperty(xml, string.format("employees.retired(%d)", retiredIndex)) do
@@ -1194,7 +1194,7 @@ function M:loadMap()
     self.networkSyncElapsed = 0
     self.networkStateRequestElapsed = 0
     self.lastPeriodDay = g_currentMission.environment.currentDay
-    self.contracts = {{name=M:L("employees_geringfuegig_3"),salary=600,hours=40},{name=M:L("employees_teilzeit"),salary=1600,hours=80},{name=M:L("employees_vollzeit"),salary=3200,hours=160},{name=M:L("employees_leiharbeiter"),salary=120,hours=8,temporary=true},{name=M:L("employees_seasonal"),salary=3000,hours=160,seasonal=true}}
+    self.contracts = { {name=M:L("employees_geringfuegig_3"),salary=83.5,hours=44}, {name=M:L("employees_teilzeit"),salary=166.95,hours=88}, {name=M:L("employees_vollzeit"),salary=333.90,hours=176}, {name=M:L("employees_leiharbeiter"),salary=16.86,hours=8,temporary=true}, {name=M:L("employees_seasonal"),salary=333.90,hours=176,seasonal=true} }
 
     if self.isServer then
         self:loadState()
