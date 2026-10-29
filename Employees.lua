@@ -3367,6 +3367,16 @@ end
 
 AISystem.startJob = Utils.overwrittenFunction(AISystem.startJob, function(system, superFunc, job, farmId)
     if not M.enabled then return superFunc(system, job, farmId) end
+
+    -- Compatibilidade com Neighbors On The Fields:
+    -- os vizinhos utilizam a IA nativa, sem funcionários do FS25_Employees.
+    local neighborWorkers = NeighborFieldWorkers
+    if neighborWorkers ~= nil
+        and neighborWorkers.neighborFarmId ~= nil
+        and tonumber(farmId) == tonumber(neighborWorkers.neighborFarmId) then
+        return superFunc(system, job, farmId)
+    end
+
     if M.pendingSelection ~= nil then return end
     local requiredRole = M:getJobRole(job)
     local vehicle=job.vehicleParameter and job.vehicleParameter:getVehicle() or nil
